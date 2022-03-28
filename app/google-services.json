@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "881082648938",
+    "project_id": "authboymzr-7c87d",
+    "storage_bucket": "authboymzr-7c87d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881082648938:android:44a9b0cc7533eeded13d13",
+        "android_client_info": {
+          "package_name": "cd.wayupdev.mzr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881082648938-4s38mlf9otjfr1f4kpj84t2tq7atiq04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cd.wayupdev.mzr",
+            "certificate_hash": "1cac8e4c212fd817bb80637ab069c469851d7939"
+          }
+        },
+        {
+          "client_id": "881082648938-pntc87edoete0gn1q7b4m5b1ad88bn8q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkgJFDqxF-DHL3oHFOMNDpQABNVikPWqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881082648938-pntc87edoete0gn1q7b4m5b1ad88bn8q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
