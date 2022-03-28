@@ -21,7 +21,7 @@ class PostRepository @Inject constructor(private val firebaseAuth: FirebaseAuth,
     }
 
     fun getByUid(uid: String) {
-
+        //TODO
     }
 
     @ExperimentalCoroutinesApi
@@ -53,6 +53,6 @@ class PostRepository @Inject constructor(private val firebaseAuth: FirebaseAuth,
     }
 
     suspend fun updated(post: Post) {
-
+        //TODO
     }
 }
