@@ -4,8 +4,9 @@ import java.util.*
 
 data class Post(
     val uid: String = "",
-    val name: String = "",
-    val userUid: String = "",
+    val title: String = "",
+    val adminUid: String = "",
     val description: String = "",
+    val imageUrl: String = "",
     val createdAt: Date? = null
 )
