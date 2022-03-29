@@ -2,42 +2,59 @@ package cd.wayupdev.mzr.ui.screen.home
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import cd.wayupdev.mzr.ui.screen.home.componant.TopAppBarDropdownMenu
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+
+    val bodyContent = remember { mutableStateOf("Body Content Here") }
     val context = LocalContext.current
+
     BackHandler(enabled = true) {
         (context as? Activity)?.finish()
     }
     Scaffold(
         topBar = {
-            TopPageBar(navController)
+            TopPageBar(navController, bodyContent)
         },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            FloatingActionButton(onClick = {}, backgroundColor = MaterialTheme.colors.primary){
+            FloatingActionButton(onClick = {}, backgroundColor = MaterialTheme.colors.primary) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         }
-    ){
-        Text(text = "Salut le monde", color = Color.Black, modifier = Modifier.padding(16.dp))
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+                .padding(20.dp)
+        )
+        {
+            Text(bodyContent.value)
+            Text(text = "Salut le monde", color = Color.Black, modifier = Modifier.padding(16.dp))
+        }
     }
 }
 
 @Composable
-fun TopPageBar(navController: NavHostController) {
+fun TopPageBar(navController: NavHostController, bodyContent: MutableState<String>) {
     TopAppBar(
         title = {
             Text(
@@ -52,6 +69,9 @@ fun TopPageBar(navController: NavHostController) {
         },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = Color.White,
-        elevation = 12.dp
+        elevation = 12.dp,
+        actions = {
+            TopAppBarDropdownMenu(bodyContent, navController)
+        }
     )
 }
