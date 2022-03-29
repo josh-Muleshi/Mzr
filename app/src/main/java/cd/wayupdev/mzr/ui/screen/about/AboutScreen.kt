@@ -32,7 +32,7 @@ fun AboutScreen(navController: NavHostController,aboutViewModel: AboutViewModel 
             when(state) {
                 is AboutState.Success -> {
                     if ((state as AboutState.Success).isAuth) {
-                        navController.navigate(Screen.Home.route)
+                        navController.navigate(Screen.AddPost.route)
                     } else {
                         navController.navigate(Screen.Auth.route)
                     }
