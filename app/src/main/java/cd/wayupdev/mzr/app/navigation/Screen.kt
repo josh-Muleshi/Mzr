@@ -1,4 +1,4 @@
-package cd.wayupdev.mzr.app
+package cd.wayupdev.mzr.app.navigation
 
 sealed class Screen (val route : String){
     object Auth : Screen("auth")
