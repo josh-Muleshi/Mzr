@@ -21,11 +21,11 @@ fun MainNavGraph(navController : NavHostController) {
         }
 
         composable(Screen.About.route){
-            AboutScreen()
+            AboutScreen(navController)
         }
 
         composable(Screen.Settings.route){
-            SettingScreen()
+            SettingScreen(navController)
         }
     }
 }
