@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import cd.wayupdev.mzr.ui.screen.TopAppBar.AppBarScreen
+import cd.wayupdev.mzr.ui.screen.topAppBar.AppBarScreen
 
 @Composable
 fun SettingScreen(navController: NavHostController) {

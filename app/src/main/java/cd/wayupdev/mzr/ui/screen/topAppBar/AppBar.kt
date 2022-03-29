@@ -1,4 +1,4 @@
-package cd.wayupdev.mzr.ui.screen.TopAppBar
+package cd.wayupdev.mzr.ui.screen.topAppBar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

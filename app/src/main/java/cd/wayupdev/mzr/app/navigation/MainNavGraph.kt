@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import cd.wayupdev.mzr.ui.screen.About.AboutScreen
+import cd.wayupdev.mzr.ui.screen.about.AboutScreen
 import cd.wayupdev.mzr.ui.screen.home.HomeScreen
 import cd.wayupdev.mzr.ui.screen.settings.SettingScreen
 import cd.wayupdev.mzr.ui.screen.splash.SplashScreen
