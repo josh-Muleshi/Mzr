@@ -6,25 +6,24 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import cd.wayupdev.mzr.app.navigation.Screen
 
 @Composable
-fun TopAppBarDropdownMenu(bodyContent: MutableState<String>, navController: NavHostController) {
+fun TopAppBarDropdownMenu(navController: NavHostController) {
 
-    val expanded = remember { mutableStateOf(false) } // 1
+    val expanded = remember { mutableStateOf(false) }
 
     Box(
         Modifier
             .wrapContentSize(Alignment.TopEnd)
     ) {
         IconButton(onClick = {
-            expanded.value = true // 2
-            bodyContent.value =  "Menu Opening"
+            expanded.value = true
         }) {
             Icon(
                 Icons.Filled.MoreVert,
@@ -38,37 +37,19 @@ fun TopAppBarDropdownMenu(bodyContent: MutableState<String>, navController: NavH
         onDismissRequest = { expanded.value = false },
     ) {
         DropdownMenuItem(onClick = {
-            expanded.value = false // 3
-            bodyContent.value = "First Item Selected"  // 4
+            expanded.value = false
+            navController.navigate(Screen.Settings.route)
         }) {
-            Text("First item")
+            Text("Settings")
         }
 
         Divider()
 
         DropdownMenuItem(onClick = {
             expanded.value = false
-            bodyContent.value = "Second Item Selected"
+            navController.navigate(Screen.About.route)
         }) {
-            Text("Second item")
-        }
-
-        Divider()
-
-        DropdownMenuItem(onClick = {
-            expanded.value = false
-            bodyContent.value = "Third Item Selected"
-        }) {
-            Text("Third item")
-        }
-
-        Divider()
-
-        DropdownMenuItem(onClick = {
-            expanded.value = false
-            bodyContent.value = "Fourth Item Selected"
-        }) {
-            Text("Fourth item")
+            Text("About us")
         }
     }
 }

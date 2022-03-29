@@ -10,9 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +21,6 @@ import cd.wayupdev.mzr.ui.screen.home.componant.TopAppBarDropdownMenu
 @Composable
 fun HomeScreen(navController: NavHostController) {
 
-    val bodyContent = remember { mutableStateOf("Body Content Here") }
     val context = LocalContext.current
 
     BackHandler(enabled = true) {
@@ -32,7 +28,7 @@ fun HomeScreen(navController: NavHostController) {
     }
     Scaffold(
         topBar = {
-            TopPageBar(navController, bodyContent)
+            TopPageBar(navController)
         },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
@@ -47,14 +43,13 @@ fun HomeScreen(navController: NavHostController) {
                 .padding(20.dp)
         )
         {
-            Text(bodyContent.value)
             Text(text = "Salut le monde", color = Color.Black, modifier = Modifier.padding(16.dp))
         }
     }
 }
 
 @Composable
-fun TopPageBar(navController: NavHostController, bodyContent: MutableState<String>) {
+fun TopPageBar(navController: NavHostController) {
     TopAppBar(
         title = {
             Text(
@@ -71,7 +66,7 @@ fun TopPageBar(navController: NavHostController, bodyContent: MutableState<Strin
         contentColor = Color.White,
         elevation = 12.dp,
         actions = {
-            TopAppBarDropdownMenu(bodyContent, navController)
+            TopAppBarDropdownMenu(navController)
         }
     )
 }
