@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import cd.wayupdev.mzr.ui.screen.about.AboutScreen
 import cd.wayupdev.mzr.ui.screen.addpost.AddPostScreen
 import cd.wayupdev.mzr.ui.screen.auth.AuthScreen
+import cd.wayupdev.mzr.ui.screen.favory.FavoriteScreen
 import cd.wayupdev.mzr.ui.screen.home.HomeScreen
 import cd.wayupdev.mzr.ui.screen.settings.SettingScreen
 import cd.wayupdev.mzr.ui.screen.splash.SplashScreen
@@ -15,11 +16,11 @@ import cd.wayupdev.mzr.ui.screen.splash.SplashScreen
 fun MainNavGraph(navController : NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Splash.route ) {
         composable(Screen.Splash.route) {
-            SplashScreen(navController = navController)
+            SplashScreen(navController)
         }
 
         composable(Screen.Home.route) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController)
         }
 
         composable(Screen.About.route){
@@ -36,6 +37,10 @@ fun MainNavGraph(navController : NavHostController) {
 
         composable(Screen.AddPost.route){
             AddPostScreen()
+        }
+
+        composable(Screen.Favorite.route){
+            FavoriteScreen(navController)
         }
     }
 }

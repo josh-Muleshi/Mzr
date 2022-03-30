@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.ui.screen.home.componant.TopPageBar
 
 @Composable
@@ -32,8 +33,10 @@ fun HomeScreen(navController: NavHostController) {
         },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            FloatingActionButton(onClick = {}, backgroundColor = MaterialTheme.colors.primary) {
-                Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+            FloatingActionButton(
+                onClick = {navController.navigate(Screen.Favorite.route)},
+                backgroundColor = MaterialTheme.colors.primary) {
+                    Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
             }
         }
     ) {
