@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import cd.wayupdev.mzr.ui.screen.about.AboutScreen
 import cd.wayupdev.mzr.ui.screen.addpost.AddPostScreen
 import cd.wayupdev.mzr.ui.screen.auth.AuthScreen
+import cd.wayupdev.mzr.ui.screen.detailPost.DetailPost
 import cd.wayupdev.mzr.ui.screen.favory.FavoriteScreen
 import cd.wayupdev.mzr.ui.screen.home.HomeScreen
 import cd.wayupdev.mzr.ui.screen.settings.SettingScreen
@@ -41,6 +42,10 @@ fun MainNavGraph(navController : NavHostController) {
 
         composable(Screen.Favorite.route){
             FavoriteScreen(navController)
+        }
+
+        composable(Screen.DetailPost.route){
+            DetailPost()
         }
     }
 }
