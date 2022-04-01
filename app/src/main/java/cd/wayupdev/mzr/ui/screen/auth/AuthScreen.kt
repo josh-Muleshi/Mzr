@@ -32,7 +32,7 @@ fun AuthScreen(navController: NavHostController, viewModel: AuthViewModel = hilt
     LaunchedEffect(state) {
         when (state) {
             is AuthState.Success -> {
-                navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.AddPost.route)
             }
             is AuthState.Error -> {
                 snackbarHostState.showSnackbar((state as AuthState.Error).errorMessage)
