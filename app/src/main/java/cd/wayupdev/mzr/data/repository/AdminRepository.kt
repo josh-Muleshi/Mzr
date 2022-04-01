@@ -19,7 +19,7 @@ class AdminRepository @Inject constructor(private val firebaseAuth: FirebaseAuth
 
     suspend fun register(email: String, password: String) {
         firebaseAuth.signInAnonymously().await()
-        firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}")
+        firestore.document("${FireBaseConstants.admins}/${FireBaseConstants.auth}")
             .set(Admin(uid = currentUser?.uid.toString(), email = email, password = password, createdAt = Date(System.currentTimeMillis()))).await()
     }
 
@@ -33,6 +33,22 @@ class AdminRepository @Inject constructor(private val firebaseAuth: FirebaseAuth
             value?.toObject(Admin::class.java).let { user ->
                 if (!isClosedForSend) {
                     trySend(user)
+                }
+            }
+        }
+        awaitClose()
+    }
+
+    @ExperimentalCoroutinesApi
+    suspend fun getAdmin() = callbackFlow {
+        firestore.document("${FireBaseConstants.admins}/${FireBaseConstants.auth}").addSnapshotListener { value, error ->
+            if (error != null && value == null) {
+                close(error)
+            }
+
+            value?.toObject(Admin::class.java).let { admin ->
+                if (!isClosedForSend) {
+                    trySend(admin)
                 }
             }
         }
