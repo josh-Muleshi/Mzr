@@ -7,5 +7,4 @@ sealed class AuthState {
     object Loading : AuthState()
     data class Error(val errorMessage: String) : AuthState()
     object Success: AuthState()
-    //data class Success(val admin: ArrayList<Admin>) : AuthState()
 }

@@ -37,7 +37,7 @@ fun MainNavGraph(navController : NavHostController) {
         }
 
         composable(Screen.AddPost.route){
-            AddPostScreen()
+            AddPostScreen(navController)
         }
 
         composable(Screen.Favorite.route){
