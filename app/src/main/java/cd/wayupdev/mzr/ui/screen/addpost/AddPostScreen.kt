@@ -1,13 +1,8 @@
 package cd.wayupdev.mzr.ui.screen.addpost
 
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,16 +12,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.R
 import cd.wayupdev.mzr.app.navigation.Screen
-import cd.wayupdev.mzr.ui.screen.topAppBar.AppBarScreen
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -55,8 +49,8 @@ fun AddPostScreen(navController : NavHostController) {
                 }
             }
         }
-        
-        
+
+        CustomTextField()
 
         RequestContentPermission()
     }
@@ -64,8 +58,24 @@ fun AddPostScreen(navController : NavHostController) {
 }
 
 @Composable
-fun CuatomTextField() {
-    
+fun CustomTextField() {
+    TextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = "null",
+        onValueChange = {
+            //onTextChange(it)
+        },
+        placeholder = {
+            Text(
+                modifier = Modifier.alpha(ContentAlpha.medium),
+                text = "Add Post",
+                color = Color.Black
+            )
+        },
+        textStyle = TextStyle(
+            fontSize = MaterialTheme.typography.subtitle1.fontSize
+        )
+    )
 }
 
 @Composable
