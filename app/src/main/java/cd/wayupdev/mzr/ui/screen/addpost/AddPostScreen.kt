@@ -9,13 +9,15 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -23,18 +25,38 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.R
+import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.ui.screen.topAppBar.AppBarScreen
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun AddPostScreen(navController : NavHostController) {
-    Scaffold(
-        topBar = {
-            AppBarScreen(navController,ScreenName = "AddPost")
+    Column {
+        Surface(modifier = Modifier.fillMaxWidth().width(120.dp)) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { navController.navigate(Screen.Home.route) }) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "close")
+                }
+                Button(
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    ),
+                    shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text(text = "Save")
+                }
+            }
         }
-    ) {
+
         RequestContentPermission()
     }
+
 }
 
 @Composable
@@ -42,11 +64,10 @@ fun RequestContentPermission() {
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
-    val context = LocalContext.current
+    /*val context = LocalContext.current
     val bitmap =  remember {
         mutableStateOf<Bitmap?>(null)
-    }
-
+    }*/
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
@@ -73,10 +94,14 @@ fun RequestContentPermission() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
+        Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)),onClick = {
             launcher.launch("image/*")
         }) {
-            Icon(painter = painterResource(id = R.drawable.ic_photo_camera), contentDescription = null, modifier = Modifier.padding(25.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.ic_photo_camera),
+                contentDescription = null,
+                modifier = Modifier.padding(25.dp)
+            )
         }
 
     }
