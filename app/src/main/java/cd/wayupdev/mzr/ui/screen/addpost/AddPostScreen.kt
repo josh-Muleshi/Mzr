@@ -32,14 +32,16 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun AddPostScreen(navController : NavHostController) {
     Column {
-        Surface(modifier = Modifier.fillMaxWidth().width(120.dp)) {
+        Surface(modifier = Modifier
+            .fillMaxWidth()
+            .width(120.dp)) {
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { navController.navigate(Screen.Home.route) }) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "close")
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "close", modifier = Modifier.size(30.dp))
                 }
                 Button(
                     modifier = Modifier.padding(
@@ -53,10 +55,17 @@ fun AddPostScreen(navController : NavHostController) {
                 }
             }
         }
+        
+        
 
         RequestContentPermission()
     }
 
+}
+
+@Composable
+fun CuatomTextField() {
+    
 }
 
 @Composable
@@ -72,7 +81,7 @@ fun RequestContentPermission() {
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
     }
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         /*imageUri?.let {
             if (Build.VERSION.SDK_INT < 28) {
                 bitmap.value = MediaStore.Images
@@ -90,9 +99,10 @@ fun RequestContentPermission() {
                     modifier = Modifier.size(400.dp))
             }
         }*/
-        if (imageUri != null) GlideImage(imageModel = imageUri, contentScale = ContentScale.Crop, modifier = Modifier.size(300.dp))
-
-        Spacer(modifier = Modifier.height(16.dp))
+        if (imageUri != null) {
+            GlideImage(imageModel = imageUri, contentScale = ContentScale.Crop, modifier = Modifier.size(300.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
         Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)),onClick = {
             launcher.launch("image/*")
