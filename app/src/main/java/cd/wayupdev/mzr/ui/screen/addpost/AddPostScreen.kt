@@ -17,12 +17,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.R
 import cd.wayupdev.mzr.ui.screen.topAppBar.AppBarScreen
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun AddPostScreen(navController : NavHostController) {
@@ -50,7 +52,7 @@ fun RequestContentPermission() {
         imageUri = uri
     }
     Column(modifier = Modifier.padding(16.dp)) {
-        imageUri?.let {
+        /*imageUri?.let {
             if (Build.VERSION.SDK_INT < 28) {
                 bitmap.value = MediaStore.Images
                     .Media.getBitmap(context.contentResolver,it)
@@ -66,7 +68,8 @@ fun RequestContentPermission() {
                     contentDescription =null,
                     modifier = Modifier.size(400.dp))
             }
-        }
+        }*/
+        if (imageUri != null) GlideImage(imageModel = imageUri, contentScale = ContentScale.Crop, modifier = Modifier.size(300.dp))
 
         Spacer(modifier = Modifier.height(16.dp))
 
