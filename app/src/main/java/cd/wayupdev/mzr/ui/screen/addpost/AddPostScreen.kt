@@ -12,12 +12,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.R
@@ -26,6 +27,11 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun AddPostScreen(navController : NavHostController) {
+
+    var textFieldHeight by remember {
+        mutableStateOf(190.dp)
+    }
+
     Column {
         Surface(modifier = Modifier
             .fillMaxWidth()
@@ -50,37 +56,52 @@ fun AddPostScreen(navController : NavHostController) {
                 }
             }
         }
-
-        CustomTextField()
-
-        RequestContentPermission()
+        Column(modifier = Modifier.fillMaxSize()) {
+            CustomTextField(height = textFieldHeight)
+            SelectImage(onImageSelected = {
+                if (it != null) {
+                    textFieldHeight = Dp.Unspecified
+                } else {
+                    190.dp
+                }
+            })
+        }
     }
-
 }
 
 @Composable
-fun CustomTextField() {
+fun CustomTextField(height: Dp) {
+
+    var value by remember { mutableStateOf("") }
+    val focusRequest = remember {
+        FocusRequester()
+    }
+
+
+    LaunchedEffect(Unit){
+        focusRequest.requestFocus()
+    }
+
     TextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = "",
-        onValueChange = {
-            //onTextChange(it)
-        },
-        placeholder = {
-            Text(
-                modifier = Modifier.alpha(ContentAlpha.medium),
-                text = "Add Post",
-                color = Color.Black
-            )
-        },
-        textStyle = TextStyle(
-            fontSize = MaterialTheme.typography.subtitle1.fontSize
+        value = value,
+        onValueChange = { value = it },
+        placeholder = { Text("Enter text") },
+        textStyle = TextStyle(fontSize = MaterialTheme.typography.subtitle1.fontSize),
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth()
+            .focusRequester(focusRequest)
+            .defaultMinSize(minHeight = height),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.background,
+            focusedIndicatorColor = MaterialTheme.colors.background,
+            unfocusedIndicatorColor = MaterialTheme.colors.background
         )
     )
 }
 
 @Composable
-fun RequestContentPermission() {
+fun SelectImage(onImageSelected: (Uri?) -> Unit) {
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
@@ -91,6 +112,7 @@ fun RequestContentPermission() {
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
+        onImageSelected(uri)
     }
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         /*imageUri?.let {
@@ -124,6 +146,5 @@ fun RequestContentPermission() {
                 modifier = Modifier.padding(25.dp)
             )
         }
-
     }
 }
