@@ -1,5 +1,7 @@
 package cd.wayupdev.mzr.data.repository
 
+import android.graphics.Bitmap
+import android.net.Uri
 import cd.wayupdev.mzr.data.model.Post
 import cd.wayupdev.mzr.data.util.FireBaseConstants
 import com.google.firebase.auth.FirebaseAuth
@@ -20,10 +22,6 @@ class PostRepository @Inject constructor(private val firebaseAuth: FirebaseAuth,
         firebaseAuth.currentUser
     }
 
-    fun getByUid(uid: String) {
-        //TODO
-    }
-
     @ExperimentalCoroutinesApi
     fun getAll() = callbackFlow {
         firestore.collection("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}").addSnapshotListener { value, error ->
@@ -42,17 +40,17 @@ class PostRepository @Inject constructor(private val firebaseAuth: FirebaseAuth,
         throw it
     }.flowOn(Dispatchers.IO)
 
-    suspend fun add(title: String, imageUrl: String, description: String) {
-        val contact = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, createdAt = Date(System.currentTimeMillis()))
-        val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${contact.uid}")
-        doc.set(contact).await()
+    suspend fun add(title: String, imageUrl: String, description: String, uri: Uri) {
+        val post = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, createdAt = Date(System.currentTimeMillis()))
+        val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${post.uid}")
+        doc.set(post).await()
+
+        var file = uri
+        val riversRef = storageRef.child("images/${file.lastPathSegment}")
+        uploadTask = riversRef.putFile(file)
     }
 
     suspend fun delete(contactUid: String) {
         firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${contactUid}").delete().await()
-    }
-
-    suspend fun updated(post: Post) {
-        //TODO
     }
 }
