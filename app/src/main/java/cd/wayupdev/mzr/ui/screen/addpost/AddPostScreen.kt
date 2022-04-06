@@ -77,7 +77,6 @@ fun CustomTextField(height: Dp) {
         FocusRequester()
     }
 
-
     LaunchedEffect(Unit){
         focusRequest.requestFocus()
     }
