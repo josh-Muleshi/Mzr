@@ -31,13 +31,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun AddPostScreen(navController : NavHostController) {
-    AddPost(navController = navController)
-}
-
-@OptIn(ExperimentalCoroutinesApi::class)
-@Composable
-fun AddPost(navController: NavHostController?, viewModel: AddPostViewModel = hiltViewModel()){
+fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel = hiltViewModel()){
 
     Column {
         Surface(modifier = Modifier
@@ -49,7 +43,7 @@ fun AddPost(navController: NavHostController?, viewModel: AddPostViewModel = hil
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
-                    navController?.navigate(Screen.Home.route)
+                    navController.navigate(Screen.Home.route)
                 }) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "close", modifier = Modifier.size(30.dp))
                 }
@@ -160,18 +154,18 @@ fun CustomTextField( onSubmit: (name :String, desc: String, uri: Uri) -> Unit = 
                     modifier = Modifier.padding(25.dp)
                 )
             }
-        }
 
-        Button(
-            enabled = value.isNotEmpty(),
-            onClick = { imageUri?.let { onSubmit.invoke("josh", value, it) } },
-            modifier = Modifier
-                .height(48.dp)
-                .fillMaxWidth(),
-            contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White)
-        ) {
-            Text(text = "Enregistrer" )
+            Button(
+                enabled = value.isNotEmpty(),
+                onClick = { imageUri?.let { onSubmit.invoke("josh", value, it) } },
+                modifier = Modifier
+                    .height(48.dp)
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White)
+            ) {
+                Text(text = "Enregistrer" )
+            }
         }
 
     }
