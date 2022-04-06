@@ -1,4 +1,8 @@
 package cd.wayupdev.mzr.ui.screen.addpost.business
 
-class AddPostState {
+sealed class AddPostState {
+    object Uninitialized : AddPostState()
+    object Loading : AddPostState()
+    data class Error(val errorMessage: String) : AddPostState()
+    object Success: AddPostState()
 }
