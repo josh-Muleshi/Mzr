@@ -74,6 +74,7 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                     Icon(imageVector = Icons.Default.Close, contentDescription = "close", modifier = Modifier.size(30.dp))
                 }
                 Button(
+                    enabled = viewModel.title.isNotEmpty() && viewModel.title.isNotEmpty(),
                     modifier = Modifier.padding(
                         horizontal = 16.dp,
                         vertical = 8.dp
