@@ -59,7 +59,6 @@ class PostRepository @Inject constructor(
         val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${post.uid}")
         doc.set(post).await()
 
-
     }
 
     suspend fun delete(contactUid: String) {

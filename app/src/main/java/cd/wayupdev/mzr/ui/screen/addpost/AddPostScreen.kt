@@ -33,41 +33,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Composable
 fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel = hiltViewModel()){
 
-    Column {
-        Surface(modifier = Modifier
-            .fillMaxWidth()
-            .width(120.dp)) {
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = {
-                    navController.navigate(Screen.Home.route)
-                }) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "close", modifier = Modifier.size(30.dp))
-                }
-                Button(
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
-                    ),
-                    shape = RoundedCornerShape(corner = CornerSize(12.dp)),
-                    onClick = { }
-                ) {
-                    Text(text = "Save")
-                }
-            }
-        }
-        CustomTextField(onSubmit = {
-                name, desc, uri ->  viewModel.addPost(name, desc, uri)
-        })
-    }
-}
-
-@Composable
-fun CustomTextField( onSubmit: (name :String, desc: String, uri: Uri) -> Unit = {_,_,_ -> }) {
-
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
@@ -90,83 +55,117 @@ fun CustomTextField( onSubmit: (name :String, desc: String, uri: Uri) -> Unit = 
         190.dp
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TextField(
-            value = value,
-            onValueChange = { value = it },
-            placeholder = { Text("Enter text") },
-            textStyle = TextStyle(fontSize = MaterialTheme.typography.subtitle1.fontSize),
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth()
-                .focusRequester(focusRequest)
-                .defaultMinSize(minHeight = textFieldHeight),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.background,
-                focusedIndicatorColor = MaterialTheme.colors.background,
-                unfocusedIndicatorColor = MaterialTheme.colors.background
-            )
-        )
-
-        /*val context = LocalContext.current
-    val bitmap =  remember {
-        mutableStateOf<Bitmap?>(null)
-    }*/
-        val launcher = rememberLauncherForActivityResult(
-            contract =
-            ActivityResultContracts.GetContent()
-        ) { uri: Uri? ->
-            imageUri = uri
-        }
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            /*imageUri?.let {
-            if (Build.VERSION.SDK_INT < 28) {
-                bitmap.value = MediaStore.Images
-                    .Media.getBitmap(context.contentResolver,it)
-
-            } else {
-                val source = ImageDecoder
-                    .createSource(context.contentResolver,it)
-                bitmap.value = ImageDecoder.decodeBitmap(source)
-            }
-
-            bitmap.value?.let {  btm ->
-                Image(bitmap = btm.asImageBitmap(),
-                    contentDescription =null,
-                    modifier = Modifier.size(400.dp))
-            }
-        }*/
-            if (imageUri != null) {
-                GlideImage(
-                    imageModel = imageUri,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(300.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)), onClick = {
-                launcher.launch("image/*")
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_photo_camera),
-                    contentDescription = null,
-                    modifier = Modifier.padding(25.dp)
-                )
-            }
-
-            Button(
-                enabled = value.isNotEmpty(),
-                onClick = { imageUri?.let { onSubmit.invoke("josh", value, it) } },
-                modifier = Modifier
-                    .height(48.dp)
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White)
+    Column {
+        Surface(modifier = Modifier
+            .fillMaxWidth()
+            .width(120.dp)) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Enregistrer" )
+                IconButton(onClick = {
+                    navController.navigate(Screen.Home.route)
+                }) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "close", modifier = Modifier.size(30.dp))
+                }
+                Button(
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    ),
+                    shape = RoundedCornerShape(corner = CornerSize(12.dp)),
+                    onClick = { imageUri?.let { viewModel.addPost(value, value, it) } }
+                ) {
+                    Text(text = "Save")
+                }
             }
         }
 
+        Column(modifier = Modifier.fillMaxSize()) {
+            TextField(
+                value = value,
+                onValueChange = { value = it },
+                placeholder = { Text("Enter text") },
+                textStyle = TextStyle(fontSize = MaterialTheme.typography.subtitle1.fontSize),
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth()
+                    .focusRequester(focusRequest)
+                    .defaultMinSize(minHeight = textFieldHeight),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.background,
+                    focusedIndicatorColor = MaterialTheme.colors.background,
+                    unfocusedIndicatorColor = MaterialTheme.colors.background
+                )
+            )
+
+            /*val context = LocalContext.current
+        val bitmap =  remember {
+            mutableStateOf<Bitmap?>(null)
+        }*/
+            val launcher = rememberLauncherForActivityResult(
+                contract =
+                ActivityResultContracts.GetContent()
+            ) { uri: Uri? ->
+                imageUri = uri
+            }
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                /*imageUri?.let {
+                if (Build.VERSION.SDK_INT < 28) {
+                    bitmap.value = MediaStore.Images
+                        .Media.getBitmap(context.contentResolver,it)
+
+                } else {
+                    val source = ImageDecoder
+                        .createSource(context.contentResolver,it)
+                    bitmap.value = ImageDecoder.decodeBitmap(source)
+                }
+
+                bitmap.value?.let {  btm ->
+                    Image(bitmap = btm.asImageBitmap(),
+                        contentDescription =null,
+                        modifier = Modifier.size(400.dp))
+                }
+            }*/
+                if (imageUri != null) {
+                    GlideImage(
+                        imageModel = imageUri,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(300.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)), onClick = {
+                    launcher.launch("image/*")
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_photo_camera),
+                        contentDescription = null,
+                        modifier = Modifier.padding(25.dp)
+                    )
+                }
+
+                Button(
+                    enabled = value.isNotEmpty(),
+                    onClick = { imageUri?.let { viewModel.addPost(value, value, it) } },
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White)
+                ) {
+                    Text(text = "Enregistrer" )
+                }
+            }
+
+        }
     }
+}
+
+@Composable
+fun CustomTextField( onSubmit: (name :String, desc: String, uri: Uri) -> Unit = {_,_,_ -> }) {
+
+
 }
