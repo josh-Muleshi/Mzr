@@ -12,12 +12,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +31,7 @@ import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.ui.screen.addpost.business.AddPostViewModel
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.math.sin
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -36,7 +40,7 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
-    var value by remember { mutableStateOf("") }
+
     val focusRequest = remember {
         FocusRequester()
     }
@@ -75,7 +79,7 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                         vertical = 8.dp
                     ),
                     shape = RoundedCornerShape(corner = CornerSize(12.dp)),
-                    onClick = { imageUri?.let { viewModel.addPost(value, value, it) } }
+                    onClick = { imageUri?.let { viewModel.addPost(viewModel.title, viewModel.desc, it) } }
                 ) {
                     Text(text = "Save")
                 }
@@ -84,12 +88,28 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
 
         Column(modifier = Modifier.fillMaxSize()) {
             TextField(
-                value = value,
-                onValueChange = { value = it },
-                placeholder = { Text("Enter text") },
+                value = viewModel.title,
+                onValueChange = { viewModel.title = it },
+                placeholder = { Text("Title...") },
+                textStyle = TextStyle(fontSize = MaterialTheme.typography.subtitle1.fontSize, fontWeight = FontWeight.Medium),
+                singleLine = true,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 0.dp)
+                    .fillMaxWidth()
+                    .focusRequester(focusRequest),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.background,
+                    focusedIndicatorColor = MaterialTheme.colors.background,
+                    unfocusedIndicatorColor = MaterialTheme.colors.background
+                )
+            )
+            TextField(
+                value = viewModel.desc,
+                onValueChange = { viewModel.desc = it },
+                placeholder = { Text("Description...") },
                 textStyle = TextStyle(fontSize = MaterialTheme.typography.subtitle1.fontSize),
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(horizontal = 16.dp, vertical = 0.dp)
                     .fillMaxWidth()
                     .focusRequester(focusRequest)
                     .defaultMinSize(minHeight = textFieldHeight),
@@ -99,11 +119,6 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                     unfocusedIndicatorColor = MaterialTheme.colors.background
                 )
             )
-
-            /*val context = LocalContext.current
-        val bitmap =  remember {
-            mutableStateOf<Bitmap?>(null)
-        }*/
             val launcher = rememberLauncherForActivityResult(
                 contract =
                 ActivityResultContracts.GetContent()
@@ -111,61 +126,28 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                 imageUri = uri
             }
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                /*imageUri?.let {
-                if (Build.VERSION.SDK_INT < 28) {
-                    bitmap.value = MediaStore.Images
-                        .Media.getBitmap(context.contentResolver,it)
-
-                } else {
-                    val source = ImageDecoder
-                        .createSource(context.contentResolver,it)
-                    bitmap.value = ImageDecoder.decodeBitmap(source)
-                }
-
-                bitmap.value?.let {  btm ->
-                    Image(bitmap = btm.asImageBitmap(),
-                        contentDescription =null,
-                        modifier = Modifier.size(400.dp))
-                }
-            }*/
                 if (imageUri != null) {
-                    GlideImage(
-                        imageModel = imageUri,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(300.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+                    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp, end = 24.dp),horizontalArrangement = Arrangement.End) {
+                        GlideImage(
+                            imageModel = imageUri,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(180.dp).clip(shape = RoundedCornerShape(corner = CornerSize(12.dp)))
 
+                        )
+                    }
+                }
                 Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)), onClick = {
                     launcher.launch("image/*")
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_photo_camera),
                         contentDescription = null,
-                        modifier = Modifier.padding(25.dp)
+                        modifier = Modifier.padding(23.dp)
                     )
                 }
-
-                Button(
-                    enabled = value.isNotEmpty(),
-                    onClick = { imageUri?.let { viewModel.addPost(value, value, it) } },
-                    modifier = Modifier
-                        .height(48.dp)
-                        .fillMaxWidth(),
-                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White)
-                ) {
-                    Text(text = "Enregistrer" )
-                }
             }
-
         }
     }
-}
-
-@Composable
-fun CustomTextField( onSubmit: (name :String, desc: String, uri: Uri) -> Unit = {_,_,_ -> }) {
-
-
 }

@@ -1,6 +1,10 @@
 package cd.wayupdev.mzr.ui.screen.addpost.business
 
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cd.wayupdev.mzr.data.repository.PostRepository
@@ -16,6 +20,9 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class AddPostViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
+
+    var title by mutableStateOf("")
+    var desc by mutableStateOf("")
 
     private val _addPostState = MutableStateFlow<AddPostState>(AddPostState.Uninitialized)
     val addPostState: StateFlow<AddPostState>

@@ -52,13 +52,12 @@ class PostRepository @Inject constructor(
     suspend fun add(title: String, description: String, uri: Uri) {
 
         val riversRef = storageRef.child("images/${uri.lastPathSegment}")
-        riversRef.putFile(uri).await()
+        riversRef.putFile(uri)
         val imageUrl = riversRef.downloadUrl.toString()
 
         val post = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, createdAt = Date(System.currentTimeMillis()))
         val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${post.uid}")
         doc.set(post).await()
-
     }
 
     suspend fun delete(contactUid: String) {
