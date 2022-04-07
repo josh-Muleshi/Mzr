@@ -6,7 +6,9 @@ import cd.wayupdev.mzr.data.util.FireBaseConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storageMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -51,10 +53,21 @@ class PostRepository @Inject constructor(
 
     suspend fun add(title: String, description: String, uri: Uri) {
 
-        val riversRef = storageRef.child("images/${uri.lastPathSegment}")
-        riversRef.putFile(uri)
-        val imageUrl = riversRef.downloadUrl.toString()
+        //
 
+        val mimeType = "image/jpg"
+
+        val storageRef = storage.reference
+        val fileRef = storageRef.child("images/${uri.lastPathSegment}")
+
+        val metadata = mimeType?.let {
+            StorageMetadata.Builder()
+                .setContentType(mimeType)
+                .build()
+        }
+        fileRef.putFile(uri, metadata)
+
+        val imageUrl = fileRef.downloadUrl.toString()
         val post = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, createdAt = Date(System.currentTimeMillis()))
         val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${post.uid}")
         doc.set(post).await()
