@@ -53,14 +53,12 @@ class PostRepository @Inject constructor(
 
     suspend fun add(title: String, description: String, uri: Uri) {
 
-        //
-
         val mimeType = "image/jpg"
 
         val storageRef = storage.reference
         val fileRef = storageRef.child("images/${uri.lastPathSegment}")
 
-        val metadata = mimeType?.let {
+        val metadata = mimeType.let {
             StorageMetadata.Builder()
                 .setContentType(mimeType)
                 .build()
