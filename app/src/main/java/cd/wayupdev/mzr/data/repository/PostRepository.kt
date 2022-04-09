@@ -1,6 +1,7 @@
 package cd.wayupdev.mzr.data.repository
 
 import android.net.Uri
+import android.util.Log
 import cd.wayupdev.mzr.data.model.Post
 import cd.wayupdev.mzr.data.util.FireBaseConstants
 import com.google.firebase.auth.FirebaseAuth
@@ -24,13 +25,8 @@ class PostRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) {
-
     private val currentUser by lazy {
         firebaseAuth.currentUser
-    }
-
-    private val storageRef by lazy {
-        storage.reference
     }
 
     @ExperimentalCoroutinesApi
@@ -53,19 +49,15 @@ class PostRepository @Inject constructor(
 
     suspend fun add(title: String, description: String, uri: Uri) {
 
-        val mimeType = "image/jpg"
+        val fileRef = storage.reference.child("images/${uri.lastPathSegment}")
+        fileRef.putFile(uri).await()
+        val imageUrl = fileRef.downloadUrl.await().toString()
 
-        val storageRef = storage.reference
-        val fileRef = storageRef.child("images/${uri.lastPathSegment}")
+        addPostStore(title, description, imageUrl)
 
-        val metadata = mimeType.let {
-            StorageMetadata.Builder()
-                .setContentType(mimeType)
-                .build()
-        }
-        fileRef.putFile(uri, metadata)
+    }
 
-        val imageUrl = fileRef.downloadUrl.toString()
+    private suspend fun addPostStore(title: String, description: String, imageUrl: String){
         val post = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, createdAt = Date(System.currentTimeMillis()))
         val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${post.uid}")
         doc.set(post).await()
