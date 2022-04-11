@@ -1,8 +1,13 @@
 package cd.wayupdev.mzr.ui.screen.addpost
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.net.Uri
+import android.widget.DatePicker
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,21 +22,23 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.R
 import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.ui.screen.addpost.business.AddPostViewModel
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlin.math.sin
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -128,26 +135,80 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
             }
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 if (imageUri != null) {
-                    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp, end = 24.dp),horizontalArrangement = Arrangement.End) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp, end = 24.dp),horizontalArrangement = Arrangement.End) {
                         GlideImage(
                             imageModel = imageUri,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .width(200.dp)
-                                .height(180.dp).clip(shape = RoundedCornerShape(corner = CornerSize(12.dp)))
+                                .height(180.dp)
+                                .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp)))
 
                         )
                     }
                 }
-                Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)), onClick = {
-                    launcher.launch("image/*")
-                }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_photo_camera),
-                        contentDescription = null,
-                        modifier = Modifier.padding(23.dp)
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)), onClick = {
+                        launcher.launch("image/*")
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_photo_camera),
+                            contentDescription = null,
+                            modifier = Modifier.padding(23.dp)
+                        )
+                    }
+                    ShowDatePicker()
                 }
+            }
+        }
+    }
+}
+
+@SuppressLint("SimpleDateFormat")
+@Composable
+fun ShowDatePicker(){
+
+    val context = LocalContext.current
+
+    val year: Int
+    val month : Int
+    val day: Int
+
+    val calendar = Calendar.getInstance()
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+    calendar.time = Date()
+
+    val date = remember { mutableStateOf("") }
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+            date.value = "$dayOfMonth $month $year"
+        }, year, month, day
+    )
+
+    Button(modifier = Modifier.background(Color.Unspecified), onClick = {
+        datePickerDialog.show()
+    }) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(corner = CornerSize(10.dp)))
+                .background(color = Color.White)
+                .padding(start = 8.dp, end = 8.dp)
+        ) {
+            Row{
+                Image(painterResource(id = R.drawable.ic_date), contentDescription = "date")
+                Text(
+                    text = date.value,
+                    fontSize = 17.sp
+                )
             }
         }
     }
