@@ -39,6 +39,7 @@ import cd.wayupdev.mzr.ui.screen.home.business.HomeState
 import cd.wayupdev.mzr.ui.screen.home.business.HomeViewModel
 import cd.wayupdev.mzr.ui.screen.home.componant.TopPageBar
 import cd.wayupdev.mzr.ui.theme.Black_ic
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
@@ -137,13 +138,12 @@ fun ItemShowImage(post: Post) {
             .fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
     ) {
-        Image(
-            painter = painterResource(id = post.imageUrl.toInt()),
-            contentDescription = null,
+        GlideImage(
+            imageModel = post.imageUrl,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .height(200.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
         BottomShadow(post)
     }
@@ -178,7 +178,11 @@ fun BottomShadow(post: Post) {
                     .padding(start = 8.dp, end = 8.dp)
             ){
                 Row {
-                    Image(painterResource(id = cd.wayupdev.mzr.R.drawable.ic_date), contentDescription = "date")
+                    GlideImage(
+                        imageModel = post.imageUrl,
+                        //contentScale = ContentScale.Crop
+                    )
+                    //Image(painterResource(id = cd.wayupdev.mzr.R.drawable.ic_date), contentDescription = "date")
                     Text(
                         text = "14 fev 2022",
                         fontSize = 17.sp
