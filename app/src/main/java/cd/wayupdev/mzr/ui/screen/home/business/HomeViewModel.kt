@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
 
     private val _data = MutableStateFlow<HomeState>(HomeState.Uninitialized)

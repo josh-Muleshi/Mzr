@@ -15,6 +15,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,17 +30,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.data.ShowList
 import cd.wayupdev.mzr.data.model.Post
+import cd.wayupdev.mzr.ui.screen.home.business.HomeState
+import cd.wayupdev.mzr.ui.screen.home.business.HomeViewModel
 import cd.wayupdev.mzr.ui.screen.home.componant.TopPageBar
 import cd.wayupdev.mzr.ui.theme.Black_ic
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
+    val posts by viewModel.data.collectAsState()
+
 
     BackHandler(enabled = true) {
         (context as? Activity)?.finish()
@@ -62,7 +69,7 @@ fun HomeScreen(navController: NavHostController) {
                 .fillMaxWidth()
         )
         {
-            DisplayItShow{
+            DisplayItShow((posts as HomeState.Success).posts){
                 navController.navigate(Screen.DetailPost.route)
                 Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
             }
@@ -71,22 +78,22 @@ fun HomeScreen(navController: NavHostController) {
 }
 
 @Composable
-fun DisplayItShow(selectedItem: (Post)->(Unit)) {
-    val itShow = remember { ShowList.itShows }
+fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
+    //val itShow = remember { ShowList.itShows }
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp)
     ){
         items(
-            items = itShow,
+            items = posts,
             itemContent = {
-                ItemUi(infoShows = it, selectedItem = selectedItem)
+                ItemUi(post = it, selectedItem = selectedItem)
             }
         )
     }
 }
 
 @Composable
-fun ItemUi(infoShows: Post, selectedItem: (Post)->(Unit)) {
+fun ItemUi(post: Post, selectedItem: (Post)->(Unit)) {
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -97,20 +104,20 @@ fun ItemUi(infoShows: Post, selectedItem: (Post)->(Unit)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { selectedItem(infoShows) },
+                .clickable { selectedItem(post) },
             verticalArrangement = Arrangement.Center
         ) {
 
-            ItemShowImage(infoShows = infoShows)
+            ItemShowImage(post = post)
 
             Column(
                 modifier = Modifier
                     .padding(10.dp)
             ) {
-                Text(text = infoShows.title, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                Text(text = post.title, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = infoShows.description,
+                    text = post.description,
                     style = MaterialTheme.typography.body1,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
@@ -123,7 +130,7 @@ fun ItemUi(infoShows: Post, selectedItem: (Post)->(Unit)) {
 /*--------*/
 
 @Composable
-fun ItemShowImage(infoShows: Post) {
+fun ItemShowImage(post: Post) {
     Box(
         modifier = Modifier
             .height(200.dp)
@@ -131,19 +138,19 @@ fun ItemShowImage(infoShows: Post) {
         contentAlignment = Alignment.BottomCenter
     ) {
         Image(
-            painter = painterResource(id = infoShows.imageUrl.toInt()),
+            painter = painterResource(id = post.imageUrl.toInt()),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth(),
         )
-        BottomShadow(infoShows)
+        BottomShadow(post)
     }
 }
 
 @Composable
-fun BottomShadow(infoShows: Post) {
+fun BottomShadow(post: Post) {
     Box(
         modifier = Modifier
             .background(
