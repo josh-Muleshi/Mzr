@@ -36,9 +36,9 @@ class PostRepository @Inject constructor(
                 close(error)
             }
 
-            value?.toObjects(Post::class.java).let { contacts ->
+            value?.toObjects(Post::class.java).let { posts ->
                 if (!isClosedForSend) {
-                    trySend(contacts)
+                    trySend(posts)
                 }
             }
         }

@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cd.wayupdev.mzr.data.model.Post
 import cd.wayupdev.mzr.data.repository.PostRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
+
+@ExperimentalCoroutinesApi
+@HiltViewModel
 class HomeViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
 
     private val _data = MutableStateFlow<HomeState>(HomeState.Uninitialized)
@@ -18,11 +21,11 @@ class HomeViewModel @Inject constructor(private val postRepository: PostReposito
         get() = _data
 
     init {
-        getAllPost()
+        getAllPosts()
     }
 
     @ExperimentalCoroutinesApi
-    private fun getAllPost() = viewModelScope.launch {
+    private fun getAllPosts() = viewModelScope.launch {
         _data.emit(HomeState.Loading)
         try {
             postRepository.getAll().collect { posts ->

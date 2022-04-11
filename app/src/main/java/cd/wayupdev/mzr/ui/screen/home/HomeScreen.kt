@@ -26,11 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.data.ShowList
@@ -40,13 +42,14 @@ import cd.wayupdev.mzr.ui.screen.home.business.HomeViewModel
 import cd.wayupdev.mzr.ui.screen.home.componant.TopPageBar
 import cd.wayupdev.mzr.ui.theme.Black_ic
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
     val posts by viewModel.data.collectAsState()
-
 
     BackHandler(enabled = true) {
         (context as? Activity)?.finish()
@@ -70,9 +73,11 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                 .fillMaxWidth()
         )
         {
-            DisplayItShow((posts as HomeState.Success).posts){
-                navController.navigate(Screen.DetailPost.route)
-                Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+            if(posts is HomeState.Success){
+                DisplayItShow((posts as HomeState.Success).posts){
+                    navController.navigate(Screen.DetailPost.route)
+                    Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -82,6 +87,21 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
 fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
     //val itShow = remember { ShowList.itShows }
     LazyColumn(
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxSize(),
+        content = {
+            item {
+                Text(text = "${posts.size} Contacts", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            items(count = posts.size) {
+                ItemUi(posts[it], selectedItem = { post ->
+                    selectedItem.invoke(post)
+                })
+            }
+        })
+    /*LazyColumn(
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp)
     ){
         items(
@@ -90,7 +110,7 @@ fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
                 ItemUi(post = it, selectedItem = selectedItem)
             }
         )
-    }
+    }*/
 }
 
 @Composable
@@ -178,11 +198,7 @@ fun BottomShadow(post: Post) {
                     .padding(start = 8.dp, end = 8.dp)
             ){
                 Row {
-                    GlideImage(
-                        imageModel = post.imageUrl,
-                        //contentScale = ContentScale.Crop
-                    )
-                    //Image(painterResource(id = cd.wayupdev.mzr.R.drawable.ic_date), contentDescription = "date")
+                    Image(painterResource(id = cd.wayupdev.mzr.R.drawable.ic_date), contentDescription = "date")
                     Text(
                         text = "14 fev 2022",
                         fontSize = 17.sp
@@ -192,7 +208,3 @@ fun BottomShadow(post: Post) {
         }
     }
 }
-
-
-
-
