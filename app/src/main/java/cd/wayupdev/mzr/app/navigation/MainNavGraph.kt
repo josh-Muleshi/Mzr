@@ -12,7 +12,9 @@ import cd.wayupdev.mzr.ui.screen.favory.FavoriteScreen
 import cd.wayupdev.mzr.ui.screen.home.HomeScreen
 import cd.wayupdev.mzr.ui.screen.settings.SettingScreen
 import cd.wayupdev.mzr.ui.screen.splash.SplashScreen
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun MainNavGraph(navController : NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Splash.route ) {

@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,7 +16,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,10 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.NavHostController
 import cd.wayupdev.mzr.app.navigation.Screen
-import cd.wayupdev.mzr.data.ShowList
 import cd.wayupdev.mzr.data.model.Post
 import cd.wayupdev.mzr.ui.screen.home.business.HomeState
 import cd.wayupdev.mzr.ui.screen.home.business.HomeViewModel
@@ -85,7 +81,6 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
 
 @Composable
 fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
-    //val itShow = remember { ShowList.itShows }
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -100,17 +95,8 @@ fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
                     selectedItem.invoke(post)
                 })
             }
-        })
-    /*LazyColumn(
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp)
-    ){
-        items(
-            items = posts,
-            itemContent = {
-                ItemUi(post = it, selectedItem = selectedItem)
-            }
-        )
-    }*/
+        }
+    )
 }
 
 @Composable
@@ -147,8 +133,6 @@ fun ItemUi(post: Post, selectedItem: (Post)->(Unit)) {
         }
     }
 }
-
-/*--------*/
 
 @Composable
 fun ItemShowImage(post: Post) {
