@@ -6,6 +6,7 @@ import cd.wayupdev.mzr.data.model.Post
 import cd.wayupdev.mzr.data.util.FireBaseConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.UploadTask
@@ -31,7 +32,9 @@ class PostRepository @Inject constructor(
 
     @ExperimentalCoroutinesApi
     fun getAll() = callbackFlow {
-        firestore.collection("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}").addSnapshotListener { value, error ->
+        firestore.collection("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
             if (error != null && value == null) {
                 close(error)
             }

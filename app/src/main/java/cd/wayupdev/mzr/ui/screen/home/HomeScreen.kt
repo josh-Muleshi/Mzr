@@ -13,9 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,8 +35,11 @@ import cd.wayupdev.mzr.ui.screen.home.business.HomeState
 import cd.wayupdev.mzr.ui.screen.home.business.HomeViewModel
 import cd.wayupdev.mzr.ui.screen.home.componant.TopPageBar
 import cd.wayupdev.mzr.ui.theme.Black_ic
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -81,22 +82,36 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
 
 @Composable
 fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
-    LazyColumn(
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.fillMaxSize(),
-        content = {
-            item {
-                Text(text = "${posts.size} Contacts", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            items(count = posts.size) {
-                ItemUi(posts[it], selectedItem = { post ->
-                    selectedItem.invoke(post)
-                })
-            }
+
+    var refreshing by remember { mutableStateOf(false) }
+    LaunchedEffect(refreshing) {
+        if (refreshing) {
+            delay(2000)
+            refreshing = false
         }
-    )
+    }
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = refreshing),
+        onRefresh = { refreshing = true }
+    ) {
+        LazyColumn(
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxSize(),
+            content = {
+                item {
+                    Text(text = "${posts.size} Contacts", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                items(count = posts.size) {
+                    ItemUi(posts[it], selectedItem = { post ->
+                        selectedItem.invoke(post)
+                    })
+                }
+            }
+        )
+    }
 }
 
 @Composable
