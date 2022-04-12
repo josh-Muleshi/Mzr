@@ -151,7 +151,7 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(shape = RoundedCornerShape(corner = CornerSize(10.dp)), onClick = {
@@ -160,9 +160,10 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                         Icon(
                             painter = painterResource(id = R.drawable.ic_photo_camera),
                             contentDescription = null,
-                            modifier = Modifier.padding(23.dp)
+                            modifier = Modifier.padding(20.dp)
                         )
                     }
+                    Spacer(modifier = Modifier.padding(16.dp))
                     ShowDatePicker()
                 }
             }
@@ -170,6 +171,7 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun ShowDatePicker(){
@@ -190,24 +192,25 @@ fun ShowDatePicker(){
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            date.value = "$dayOfMonth $month $year"
+            date.value = "$dayOfMonth . $month . $year"
         }, year, month, day
     )
 
-    Button(modifier = Modifier.background(Color.Unspecified), onClick = {
+    Card(modifier = Modifier.background(Color.Unspecified), elevation = 8.dp, onClick = {
         datePickerDialog.show()
     }) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(corner = CornerSize(10.dp)))
                 .background(color = Color.White)
-                .padding(start = 8.dp, end = 8.dp)
+                .padding(25.dp),
         ) {
             Row{
                 Image(painterResource(id = R.drawable.ic_date), contentDescription = "date")
                 Text(
                     text = date.value,
-                    fontSize = 17.sp
+                    fontSize = 17.sp,
+                    color = Color.Black
                 )
             }
         }
