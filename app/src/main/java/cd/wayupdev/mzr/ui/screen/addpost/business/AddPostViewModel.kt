@@ -23,6 +23,7 @@ class AddPostViewModel @Inject constructor(private val postRepository: PostRepos
 
     var title by mutableStateOf("")
     var desc by mutableStateOf("")
+    var date by mutableStateOf("")
 
     private val _addPostState = MutableStateFlow<AddPostState>(AddPostState.Uninitialized)
     val addPostState: StateFlow<AddPostState>

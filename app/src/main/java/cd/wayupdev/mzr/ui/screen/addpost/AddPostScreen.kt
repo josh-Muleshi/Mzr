@@ -171,9 +171,12 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalCoroutinesApi::class
+)
 @Composable
-fun ShowDatePicker(){
+fun ShowDatePicker(viewModel: AddPostViewModel = hiltViewModel()){
 
     val context = LocalContext.current
 
@@ -187,11 +190,10 @@ fun ShowDatePicker(){
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
 
-    val date = remember { mutableStateOf("") }
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            date.value = "$dayOfMonth . $month . $year"
+            viewModel.date = "$dayOfMonth . $month . $year"
         }, year, month, day
     )
 
@@ -207,7 +209,7 @@ fun ShowDatePicker(){
             Row{
                 Image(painterResource(id = R.drawable.ic_date), contentDescription = "date")
                 Text(
-                    text = date.value,
+                    text = viewModel.date,
                     fontSize = 17.sp,
                     color = Color.Black
                 )
