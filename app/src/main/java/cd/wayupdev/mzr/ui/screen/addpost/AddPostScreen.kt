@@ -1,6 +1,5 @@
 package cd.wayupdev.mzr.ui.screen.addpost
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.net.Uri
 import android.widget.DatePicker
@@ -36,7 +35,6 @@ import cd.wayupdev.mzr.app.navigation.Screen
 import cd.wayupdev.mzr.ui.screen.addpost.business.AddPostViewModel
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -87,7 +85,10 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                         vertical = 8.dp
                     ),
                     shape = RoundedCornerShape(corner = CornerSize(12.dp)),
-                    onClick = { imageUri?.let { viewModel.addPost(viewModel.title, viewModel.desc, it) } }
+                    onClick = {
+                        imageUri?.let { viewModel.addPost(viewModel.title, viewModel.desc, it) }
+                        navController.navigate(Screen.Home.route)
+                    }
                 ) {
                     Text(text = "Save")
                 }
