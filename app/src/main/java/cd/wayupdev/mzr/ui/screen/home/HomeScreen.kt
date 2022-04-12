@@ -71,7 +71,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
         )
         {
             if(posts is HomeState.Success){
-                DisplayItShow((posts as HomeState.Success).posts){
+                DisplayItShow((posts as HomeState.Success).posts, viewModel){
                     navController.navigate(Screen.DetailPost.route)
                     Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
                 }
@@ -80,10 +80,12 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
+fun DisplayItShow(posts: ArrayList<Post>, viewModel: HomeViewModel, selectedItem: (Post)->(Unit)) {
 
     var refreshing by remember { mutableStateOf(false) }
+
     LaunchedEffect(refreshing) {
         if (refreshing) {
             delay(2000)
@@ -93,17 +95,16 @@ fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = refreshing),
-        onRefresh = { refreshing = true }
+        onRefresh = {
+            refreshing = true
+            viewModel.data
+        }
     ) {
         LazyColumn(
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize(),
             content = {
-                /*item {
-                    Text(text = "${posts.size} Post", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
-                    Spacer(modifier = Modifier.height(8.dp))
-                }*/
                 items(count = posts.size) {
                     ItemUi(posts[it], selectedItem = { post ->
                         selectedItem.invoke(post)
