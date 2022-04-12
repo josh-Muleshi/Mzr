@@ -47,18 +47,18 @@ class PostRepository @Inject constructor(
         throw it
     }.flowOn(Dispatchers.IO)
 
-    suspend fun add(title: String, description: String, uri: Uri) {
+    suspend fun add(title: String, description: String, date: String, uri: Uri) {
 
         val fileRef = storage.reference.child("images/${uri.lastPathSegment}")
         fileRef.putFile(uri).await()
         val imageUrl = fileRef.downloadUrl.await().toString()
 
-        addPostStore(title, description, imageUrl)
+        addPostStore(title, description, date, imageUrl)
 
     }
 
-    private suspend fun addPostStore(title: String, description: String, imageUrl: String){
-        val post = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, createdAt = Date(System.currentTimeMillis()))
+    private suspend fun addPostStore(title: String, description: String, date: String, imageUrl: String){
+        val post = Post(uid = title, title = title, adminUid = currentUser?.uid.toString(), description = description, imageUrl = imageUrl, date = date, createdAt = Date(System.currentTimeMillis()))
         val doc = firestore.document("${FireBaseConstants.admins}/${currentUser?.uid.toString()}/${FireBaseConstants.posts}/${post.uid}")
         doc.set(post).await()
     }

@@ -86,7 +86,7 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
                     ),
                     shape = RoundedCornerShape(corner = CornerSize(12.dp)),
                     onClick = {
-                        imageUri?.let { viewModel.addPost(viewModel.title, viewModel.desc, it) }
+                        imageUri?.let { viewModel.addPost(viewModel.title, viewModel.desc, viewModel.date, it) }
                         navController.navigate(Screen.Home.route)
                     }
                 ) {

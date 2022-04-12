@@ -29,10 +29,10 @@ class AddPostViewModel @Inject constructor(private val postRepository: PostRepos
     val addPostState: StateFlow<AddPostState>
         get() = _addPostState
 
-    fun addPost(title: String, description: String, uri: Uri) = viewModelScope.launch {
+    fun addPost(title: String, description: String, date: String,  uri: Uri) = viewModelScope.launch {
         _addPostState.emit(AddPostState.Loading)
         try {
-            postRepository.add(title, description, uri)
+            postRepository.add(title, description, date, uri)
             _addPostState.emit(AddPostState.Success)
         } catch (t: Throwable) {
             _addPostState.emit(AddPostState.Error(t.message.toString()))

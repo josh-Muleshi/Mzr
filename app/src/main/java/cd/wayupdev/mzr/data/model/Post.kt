@@ -8,5 +8,6 @@ data class Post(
     val adminUid: String = "",
     val description: String = "",
     val imageUrl: String = "",
+    val date: String = "",
     val createdAt: Date? = null
 )
