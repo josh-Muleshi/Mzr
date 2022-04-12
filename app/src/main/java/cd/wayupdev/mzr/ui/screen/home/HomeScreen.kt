@@ -100,10 +100,10 @@ fun DisplayItShow(posts: ArrayList<Post>, selectedItem: (Post)->(Unit)) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize(),
             content = {
-                item {
-                    Text(text = "${posts.size} Contacts", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
+                /*item {
+                    Text(text = "${posts.size} Post", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
                     Spacer(modifier = Modifier.height(8.dp))
-                }
+                }*/
                 items(count = posts.size) {
                     ItemUi(posts[it], selectedItem = { post ->
                         selectedItem.invoke(post)
