@@ -172,7 +172,6 @@ fun AddPostScreen(navController : NavHostController, viewModel: AddPostViewModel
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("SimpleDateFormat")
 @Composable
 fun ShowDatePicker(){
 
