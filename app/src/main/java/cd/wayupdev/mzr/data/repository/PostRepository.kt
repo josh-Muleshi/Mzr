@@ -49,7 +49,7 @@ class PostRepository @Inject constructor(
 
     suspend fun add(title: String, description: String, date: String, uri: Uri) {
 
-        val fileRef = storage.reference.child("images/${uri.lastPathSegment}")
+        val fileRef = storage.reference.child("images/${title}")
         fileRef.putFile(uri).await()
         val imageUrl = fileRef.downloadUrl.await().toString()
 

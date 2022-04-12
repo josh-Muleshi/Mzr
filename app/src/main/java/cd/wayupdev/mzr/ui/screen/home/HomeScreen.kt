@@ -184,7 +184,7 @@ fun BottomShadow(post: Post) {
                 Row {
                     Image(painterResource(id = cd.wayupdev.mzr.R.drawable.ic_date), contentDescription = "date")
                     Text(
-                        text = "14 fev 2022",
+                        text = post.date,
                         fontSize = 17.sp
                     )
                 }
