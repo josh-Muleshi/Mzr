@@ -29,7 +29,7 @@ fun SettingScreen(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = name, modifier = Modifier.padding(16.dp), color = Color.Black)
-                    Icon(painter = painterResource(id = R.drawable.ic_arrow_righ), contentDescription = null)
+                    Icon(painter = painterResource(id = R.drawable.ic_arrow_righ), contentDescription = null, modifier = Modifier.padding(10.dp))
                 }
                 Divider()
             }
