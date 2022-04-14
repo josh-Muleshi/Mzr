@@ -47,7 +47,7 @@ fun MainNavGraph(navController : NavHostController) {
         }
 
         composable(Screen.DetailPost.route){
-            DetailPost()
+            DetailPost(navController)
         }
     }
 }
